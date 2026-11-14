@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BurmalWorld — сервер Древнего города</title>
+<meta name="description" content="BurmalWorld — Minecraft-сервер в стиле Древнего города: работы, квесты Литвина, сферы, кейсы и маркет.">
+<style>
+:root{--bg:#050d0d;--panel:#0a1a1a;--panel2:#0d2323;--line:#143636;--teal:#14a3a3;--teal2:#8cffe3;--text:#d8f5f0;--muted:#7fa8a3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Arial,sans-serif;line-height:1.5}
+a{color:var(--teal2);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:10;background:rgba(5,13,13,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.06em}
+.brand img{width:36px;height:36px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand span{color:var(--teal2)}
+.nav a.link{color:var(--muted);margin-left:18px;font-size:14px}
+.nav a.link:hover{color:var(--text)}
+.ip{display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:8px 10px;border-radius:8px;font-family:Consolas,monospace}
+button{cursor:pointer;font:inherit}
+.btn{background:var(--teal);color:#02110f;border:0;padding:10px 16px;border-radius:8px;font-weight:700}
+.btn:hover{background:var(--teal2)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.hero{padding:64px 0 40px;display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center}
+.hero h1{font-size:44px;line-height:1.1;margin:0 0 14px}
+.hero h1 span{color:var(--teal2)}
+.hero p{color:var(--muted);max-width:560px}
+.hero-card{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:22px}
+.hero-card h3{margin:0 0 10px;font-size:16px;color:var(--teal2)}
+.hero-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:24px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{margin:0 0 8px;font-size:17px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+section{padding:36px 0;border-top:1px solid var(--line)}
+h2{font-size:26px;margin:0 0 18px}
+.shop{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+label{font-size:13px;color:var(--muted)}
+input,select{background:#061414;border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:8px;font:inherit;width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#061414;color:var(--text);padding:8px 12px;border-radius:20px}
+.chip:hover{border-color:var(--teal)}
+.total{font-size:28px;font-weight:800;color:var(--teal2)}
+.note{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+code{background:#061414;border:1px solid var(--line);padding:2px 6px;border-radius:6px;font-family:Consolas,monospace}
+footer{padding:28px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal .box{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:22px;max-width:460px;width:100%}
+@media(max-width:860px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.shop{grid-template-columns:1fr}.nav .link{display:none}.hero h1{font-size:34px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand"><img src="server-icon.png" alt="BurmalWorld"><div>BURMAL<span>WORLD</span></div></div>
+    <div>
+      <a class="link" href="#features">Возможности</a>
+      <a class="link" href="#shop">Валюта</a>
+      <a class="link" href="#commands">Команды</a>
+      <span class="ip"><span id="ip">play.burmalworld.ru</span><button class="btn" style="padding:6px 10px" onclick="copyIp()">Копировать</button></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero" style="border:0">
+    <div>
+      <h1>Сервер в стиле <span>Древнего города</span></h1>
+      <p>BurmalWorld — выживание со скалком, работами, квестами Литвина, сферами и кейсами. Заходи, зарабатывай монеты и стань легендой Бурмалдириков.</p>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" onclick="copyIp()">Начать играть</button>
+        <a class="btn ghost" href="#shop">Купить Бурмалдирики</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>Что внутри</h3>
+      <ul>
+        <li>5 работ: лесоруб, рыбак, алхимик, шахтёр, фермер</li>
+        <li>Квесты Литвина с наградами в шалкерах</li>
+        <li>Сферы огня, воды, скорости, лечения, грома и скалка</li>
+        <li>Маркет, кейсы, варпы и RTP</li>
+        <li>Награда за час: Бурмалда и бирюзовая броня</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2>Возможности</h2>
+    <div class="grid">
+      <div class="card"><h3>Работы</h3><p>Устраивайся и получай монеты за брёвна, рыбу, зелья, руду и урожай.</p></div>
+      <div class="card"><h3>Квесты</h3><p>Пять испытаний Литвина: подземелья, охота, рыбалка, алхимия и лес.</p></div>
+      <div class="card"><h3>Сферы</h3><p>Сфера Скорости, Огня, Воды, Лечения, Грома и Скалка — активные способности с кулдауном.</p></div>
+      <div class="card"><h3>Кейсы</h3><p>Обычные, редкие и донат-кейсы с оружием, сферами и Бурмалдириками.</p></div>
+      <div class="card"><h3>Безопасный спавн</h3><p>Спавн защищён регионами: ломать и ставить блоки нельзя, PvP отключён.</p></div>
+      <div class="card"><h3>ТНТ не взрывается</h3><p>Взрыв есть, но территория остаётся целой — сервер не разнести.</p></div>
+    </div>
+  </section>
+
+  <section id="shop">
+    <h2>Бурмалдирики</h2>
+    <div class="shop">
+      <div class="card">
+        <div class="field"><label>Ник в игре</label><input id="nick" placeholder="Morro33" maxlength="16"></div>
+        <div class="field"><label>Количество Бурмалдириков</label><input id="amount" type="number" min="1" max="100000" value="100" oninput="calc()"></div>
+        <div class="row" style="margin-bottom:14px">
+          <button class="chip" onclick="setAmount(50)">50</button>
+          <button class="chip" onclick="setAmount(100)">100</button>
+          <button class="chip" onclick="setAmount(250)">250</button>
+          <button class="chip" onclick="setAmount(500)">500</button>
+        </div>
+        <div class="field"><label>К оплате</label><div class="total" id="total">1,00 ₽</div></div>
+        <button class="btn" style="width:100%" onclick="order()">Оформить покупку</button>
+        <p class="note" style="margin-top:10px">1 Бурмалдирик = 0,01 ₽. Виртуальная валюта сервера, не является деньгами.</p>
+      </div>
+      <div class="card">
+        <h3>Как это работает</h3>
+        <p style="margin-bottom:12px">Оплата проходит вручную: заявка формируется на сайте, реквизиты и подтверждение — у администратора в Telegram.</p>
+        <ol style="color:var(--muted);font-size:14px;padding-left:18px">
+          <li>Укажи ник и количество.</li>
+          <li>Нажми «Оформить покупку» — заявка скопируется.</li>
+          <li>Отправь её администратору и оплати.</li>
+          <li>Бурмалдирики придут на баланс в течение 10 минут.</li>
+        </ol>
+        <p class="note">После запуска оплаты подключим автоматический провайдер (ЮKassa/DonationAlerts) — реквизиты подставим в панели.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="commands">
+    <h2>Команды</h2>
+    <table>
+      <tr><th>Команда</th><th>Что делает</th></tr>
+      <tr><td><code>/rtp</code></td><td>Случайная телепортация в дикие земли</td></tr>
+      <tr><td><code>/spawn</code>, <code>/hub</code></td><td>Телепорт на спавн</td></tr>
+      <tr><td><code>/warps</code>, <code>/warp &lt;имя&gt;</code></td><td>Варпы: маркет, работы, квесты, кейсы</td></tr>
+      <tr><td><code>/market</code></td><td>Маркет ресурсов за монеты</td></tr>
+      <tr><td><code>/jobs</code></td><td>Выбор работы</td></tr>
+      <tr><td><code>/quests</code></td><td>Квесты Литвина</td></tr>
+      <tr><td><code>/cases</code></td><td>Кейсы</td></tr>
+      <tr><td><code>/balance</code>, <code>/pay</code></td><td>Баланс и перевод монет</td></tr>
+      <tr><td><code>/morro</code></td><td>Награда за час игры</td></tr>
+    </table>
+  </section>
+</main>
+
+<footer><div class="wrap">BurmalWorld · Minecraft 26.3 · play.burmalworld.ru · сайт не аффилирован с Mojang</div></footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="box">
+    <h3 style="margin-top:0">Заявка</h3>
+    <p id="orderText" style="color:var(--muted);white-space:pre-line"></p>
+    <div class="row" style="margin-top:14px">
+      <button class="btn" onclick="copyOrder()">Скопировать заявку</button>
+      <a class="btn ghost" href="https://t.me/burmalworld" target="_blank" rel="noopener">Telegram</a>
+      <button class="btn ghost" onclick="closeModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function setAmount(v){document.getElementById('amount').value=v;calc()}
+function calc(){
+  const a=Math.max(1,Math.min(100000,parseInt(document.getElementById('amount').value||'1',10)||1));
+  document.getElementById('total').textContent=(a*0.01).toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2})+' ₽';
+}
+function copyIp(){navigator.clipboard.writeText('play.burmalworld.ru');toast('IP скопирован')}
+function order(){
+  const nick=document.getElementById('nick').value.trim();
+  const a=Math.max(1,parseInt(document.getElementById('amount').value||'1',10)||1);
+  if(!nick){toast('Укажи ник');return}
+  const sum=(a*0.01).toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const text='Заявка BurmalWorld\nНик: '+nick+'\nБурмалдирики: '+a+'\nК оплате: '+sum+' ₽\nКурс: 1 Бурмалдирик = 0,01 ₽';
+  document.getElementById('orderText').textContent=text;
+  document.getElementById('modal').classList.add('open');
+  window._order=text;
+}
+function copyOrder(){navigator.clipboard.writeText(window._order||'');toast('Заявка скопирована')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+let tt;
+function toast(m){
+  let el=document.getElementById('toast');
+  if(!el){el=document.createElement('div');el.id='toast';el.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d2323;border:1px solid #143636;color:#d8f5f0;padding:10px 16px;border-radius:8px;z-index:20';document.body.appendChild(el)}
+  el.textContent=m;clearTimeout(tt);tt=setTimeout(()=>el.remove(),1800)
+}
+calc();
+</script>
+</body>
+</html>
